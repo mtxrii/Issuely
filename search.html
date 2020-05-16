@@ -45,9 +45,9 @@
             <input type="text" 
                    class="form-control" 
                    id="IDSearchInput" 
-                   placeholder="4 digit numerical ID ...">
+                   placeholder="1-4 digit numerical ID ...    (separate multiple with spaces)">
           </div>
-          <button type="submit" class="btn btn-primary" id="IDSearchButton">Search</button>
+          <button type="button" onclick="lookForID()" class="btn btn-info">Search</button>
         </form>
 
         <p></p>
@@ -61,7 +61,7 @@
                    id="DescSearchInput" 
                    placeholder="Description ...">
           </div>
-          <button type="submit" class="btn btn-primary" id="DescSearchButton">Search</button>
+          <button type="button" onclick="lookForDesc()" class="btn btn-info">Search</button>
         </form>
       </div>
 
@@ -79,6 +79,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
     crossorigin="anonymous"></script>
+    <script src="main.js"></script>
     <script src="search.js"></script>
   </body>
 </html>
