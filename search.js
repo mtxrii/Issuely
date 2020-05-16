@@ -1,8 +1,9 @@
-function fetchIssues() {
+function displayResults(mode, key) {
     let issues = JSON.parse(localStorage.getItem('issues'));
-    let issuesList = document.getElementById('issuesList');
+    let issuesList = document.getElementById('results');
 
     issuesList.innerHTML = '';
+    keys = key.split(" ");
 
     for (let i = 0; i < issues.length; i++) {
         let id = issues[i].id;
@@ -10,6 +11,32 @@ function fetchIssues() {
         let severity = issues[i].severity;
         let assignedTo = issues[i].assignedTo;
         let status = issues[i].status;
+
+        if (mode === 'id') {
+            found = false;
+            for (const subkey in keys) {
+                if (id.includes(keys[subkey])) found = true;
+            }
+            if (!found) continue;
+        }
+
+        if (mode === 'desc') {
+            found = false;
+            for (const subkey in keys) {
+                if (desc.toLowerCase().includes(keys[subkey].toLowerCase())) found = true;
+            }
+            if (!found) continue;
+        }
+
+
+        for (const subkey in keys) {
+            id = id.replace(keys[subkey], "<b>" + keys[subkey] + "</b>");
+        }
+
+        for (const subkey in keys) {
+            if ((keys[subkey] === '<') || (keys[subkey] === '/') || (keys[subkey] === 'b') || (keys[subkey] === '>')) continue;
+            desc = desc.replace(keys[subkey], "<b>" + keys[subkey] + "</b>");
+        }
 
         let assignedIcon = '';
         if (assignedTo != '') assignedIcon = '<span class="glyphicon glyphicon-user"></span> ';
@@ -27,80 +54,24 @@ function fetchIssues() {
     }
 }
 
-document.getElementById('issueInputForm').addEventListener('submit', saveIssue);
+function lookForID() {
 
-function saveIssue(event) {
+    let key = document.getElementById('IDSearchInput').value;
 
-    let issueID = generateID(4);
-    let issueDesc = document.getElementById('issueDescInput').value;
-    let issueSeverity = document.getElementById('issueSeverityInput').value;
-    let issueAssignedTo = document.getElementById('issueAssignedToInput').value;
-    let issueStatus = 'Open';
-
-    if (issueDesc == '') {
-        alert("Please enter a description");
+    if (!(/^\d+$/.test(key.replace(" ", "")))) {
+        alert("IDs only contain numbers.");
         return;
     }
 
-    let issue = {
-        id: issueID,
-        description: issueDesc,
-        severity: issueSeverity,
-        assignedTo: issueAssignedTo,
-        status: issueStatus
-    }
+    displayResults('id', key);
 
-    if (localStorage.getItem('issues') === null) {
-        let issues = [];
-        issues.push(issue);
-        localStorage.setItem('issues', JSON.stringify(issues));
-    }
-
-    else {
-        let issues = JSON.parse(localStorage.getItem('issues'));
-        issues.push(issue);
-        localStorage.setItem('issues', JSON.stringify(issues));
-    }
-
-    document.getElementById('issueInputForm').reset();
-
-    fetchIssues();
-
+    document.getElementById('searchByID').reset();
 }
 
-function setStatusClosed(id) {
-    let issues = JSON.parse(localStorage.getItem('issues'));
-    
-    for(let i = 0; i < issues.length; i++) {
-      if (issues[i].id == id) {
-        issues[i].status = "Closed";
-      }
-    }
-      
-    localStorage.setItem('issues', JSON.stringify(issues));
-    
-    fetchIssues();
-}
+function lookForDesc() {
 
-function deleteIssue(id) {
-    let issues = JSON.parse(localStorage.getItem('issues'));
-    
-    for(let i = 0; i < issues.length; i++) {
-      if (issues[i].id == id) {
-        issues.splice(i, 1);
-      }
-    }
-    
-    localStorage.setItem('issues', JSON.stringify(issues));
-    
-    fetchIssues();
-}
+    let key = document.getElementById('DescSearchInput').value;
+    displayResults('desc', key);
 
-function generateID(length) {
-    let id = '';
-    for (let i = 0; i < length; i++) {
-        id += chance.natural({min: 0, max: 9});
-    }
-
-    return id;
+    document.getElementById('searchByDesc').reset();
 }
