@@ -1,5 +1,5 @@
 # Issuely
-A basic javascript issue tracker.
+A basic javascript issue tracker web page.
 
 <img src="Images/main.png" width="90%"> <img src="Images/search.png" width="90%">
 
